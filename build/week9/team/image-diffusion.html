@@ -1,0 +1,218 @@
+<html>
+<head>
+    <style>
+        .answer {
+            min-height: 50px
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/css/materialize.min.css">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Image Diffusion Analysis</h1>
+
+    <section id="q1" class="question">
+        <h4>How many unique original images?</h4>
+        <div class="answer"></div>
+    </section>
+
+    <section id="q2" class="question">
+        <h4>How many unique original tweet users?</h4>
+        <div class="answer"></div>
+    </section>
+
+    <section id="q3" class="question">
+        <h4>How many times did image (592674938273865700) get retweeted?</h4>
+        (the answer should be 10. see if you can compute it)
+        <div class="answer"></div>
+    </section>
+
+    <section id="q4" class="question">
+        <h4>Which image has the most number of retweets?</h4>
+        (hint: use 'Image Id Str')
+        <div class="answer"></div>
+    </section>
+
+    <section id="q5" class="question">
+        <h4>How many original tweets were there on 4/26/15?</h4>
+        <div class="answer"></div>
+    </section>
+
+    <section id="q6" class="question">
+        <h4>Among these original tweets on 4/26/15, what is the most number of times one was retweeted?</h4>
+        <div class="answer"></div>
+    </section>
+
+    <section id="q7" class="question">
+        <h4>Among these original tweets on 4/26/15, what is the average number of times one was retweeted?</h4>
+        <div class="answer"></div>
+    </section>
+
+    <section id="q8" class="question">
+        <h4>Among these original tweets on 4/26/15, how many of them got retweeted within one hour?</h4>
+        <div class="answer"></div>
+    </section>
+
+    <section id="q9" class="question">
+        <h4>Among these original tweets on 4/26/15, what are the ten most retweeted?</h4>
+        <div class="answer"></div>
+    </section>
+
+    <section id="q10" class="question">
+        <h4>Among these ten most retweeted, how many of them contain images of people?</h4>
+        (hint: you will need to look at the photos yourself)
+        <div class="answer"></div>
+    </section>
+
+</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.1/js/materialize.min.js"></script>
+
+    <script src="/js/moment.min.js"></script>
+    <script>
+
+var items   // global scope (i.e., can be accessed in javascript console)
+
+function solution1(){
+    var images = _.pluck(items, 'Image Id Str')
+    return _.size(_.uniq(images))
+}
+
+function solution2(){
+    var users = _.pluck(items, 'Original User Screen Name')
+    return _.size(_.uniq(users))
+}
+
+function solution3(){
+    return _.filter(items, function(d){
+        return (d['Image Id Str'] == 592674938273865700 && d['Rt'] == 'Retweet')
+    }).length
+}
+
+function solution4(){
+    var imageRetweets = _.chain(items).filter(function(d){
+        return d['Rt'] == 'Retweet'
+    }).groupBy('Image Id Str').mapValues(function(n){
+        return n.length
+    }).value()
+
+    var maxCount = _.max(_.values(imageRetweets))
+
+    return _.invert(imageRetweets)[maxCount]
+}
+
+function solution5(){
+    return _.filter(items, function(tweet){
+        return tweet.Rt != 'Retweet' && tweet['* Tweet Created At'].match(/^4\/26/);
+    }).length
+}
+
+function solution6(){
+    var originals = _.chain(items).filter(function(tweet){
+        return tweet.Rt != 'Retweet' && tweet['* Tweet Created At'].match(/^4\/26/);
+    }).pluck('Image Id Str').value();
+    
+    var timesTweeted = _.chain(items).filter(function(tweet){
+        return tweet.Rt == 'Retweet' && _.contains(originals, tweet['Image Id Str']);
+    }).groupBy('Image Id Str').mapValues(function(g){
+        return g.length;
+    }).values().value();
+    
+    return _.max(timesTweeted)
+}
+
+function solution7(){
+    var originals = _.chain(items).filter(function(tweet){
+        return tweet.Rt != 'Retweet' && tweet['* Tweet Created At'].match(/^4\/26/);
+    }).pluck('Image Id Str').value();
+    
+    var timesTweeted = _.chain(items).filter(function(tweet){
+        return tweet.Rt == 'Retweet' && _.contains(originals, tweet['Image Id Str']);
+    }).groupBy('Image Id Str').mapValues(function(g){
+        return g.length;
+    }).values().value();
+    
+    return _.sum(timesTweeted)/timesTweeted.length;
+}
+
+function solution8(){
+    var originals = _.chain(items).filter(function(tweet){
+        return tweet.Rt != 'Retweet' && tweet['* Tweet Created At'].match(/^4\/26/);
+    }).pluck('Image Id Str').value();
+    
+    return _.chain(items).filter(function(tweet){
+        return tweet.Rt == 'Retweet' && _.contains(originals, tweet['Image Id Str']);
+    }).groupBy('Image Id Str').mapValues(function(group){
+        return _.filter(group, function(tweet){
+            var original = moment(new Date(tweet['* Original Tweet Created At']));
+            var rt = moment(new Date(tweet['* Tweet Created At']));
+            return rt.isBefore(original.add(1, 'h'));
+        });
+    }).pick(function(group){
+        return group.length;
+    }).keys().value().length;
+}
+
+function solution9(){
+    var originals = _.chain(items).filter(function(tweet){
+        return tweet.Rt != 'Retweet' && tweet['* Tweet Created At'].match(/^4\/26/);
+    }).pluck('Image Id Str').value();
+    
+    var winners = _.chain(items).filter(function(tweet){
+        return tweet.Rt == 'Retweet' && _.contains(originals, tweet['Image Id Str']);
+    }).groupBy('Image Id Str').pairs().sortBy(function(pair){
+        return -1*pair[1].length;
+    }).take(10).map(function(group){
+        return group[1][0]['Tweet Text']+'<br>';
+    }).value();
+
+    return winners;
+}
+
+function solution10(){
+    return 5
+}
+
+function run(id, solutionFunc, data){
+    console.log('run solution for ' + id)
+    var answer = solutionFunc(data)
+    $(id).find('.answer').html(answer)
+}
+
+function loadDataThenRunSolutions(){
+    $.get({url: './nepal_local_tweets.json'})
+     .done(function(data){
+        //  var lines = data.trim().split('\n')
+        items = data
+         // convert text lines to json arrays and save them in `items`
+        //  items = _.map(lines, JSON.parse)
+
+         console.log('number of items loaded:', items.length)
+         console.log('first item', items[0])
+
+         run('#q1', solution1, items)
+         run('#q2', solution2, items)
+         run('#q3', solution3, items)
+         run('#q4', solution4, items)
+         run('#q5', solution5, items)
+         run('#q6', solution6, items)
+         run('#q7', solution7, items)
+         run('#q8', solution8, items)
+         run('#q9', solution9, items)
+         run('#q10', solution10, items)
+     })
+     .fail(function(err){
+         console.error(err)
+     })
+}
+
+loadDataThenRunSolutions()
+
+    </script>
+
+</body>
+</html>
