@@ -15,7 +15,6 @@
 
     <section id="q1" class="question">
         <h4>How many unique original images?</h4>
-        (hint: use 'Image Id Str')
         <div class="answer"></div>
     </section>
 
@@ -79,51 +78,103 @@
 var items   // global scope (i.e., can be accessed in javascript console)
 
 function solution1(){
-    return 'TODO'
+    var images = _.pluck(items, 'Image Id Str')
+    return _.size(_.uniq(images))
 }
 
 function solution2(){
-    return 'TODO'
+    var users = _.pluck(items, 'Original User Screen Name')
+    return _.size(_.uniq(users))
 }
 
 function solution3(){
-    return 'TODO'
+    return _.filter(items, function(d){
+        return (d['Image Id Str'] == 592674938273865700 && d['Rt'] == 'Retweet')
+    }).length
 }
 
 function solution4(){
-    return 'TODO'
+    var imageRetweets = _.chain(items).filter(function(d){
+        return d['Rt'] == 'Retweet'
+    }).groupBy('Image Id Str').mapValues(function(n){
+        return n.length
+    }).value()
+
+    var maxCount = _.max(_.values(imageRetweets))
+
+    return _.invert(imageRetweets)[maxCount]
 }
 
 function solution5(){
-    return 'TODO'
+    return _.filter(items, function(tweet){
+        return tweet.Rt != 'Retweet' && tweet['* Tweet Created At'].match(/^4\/26/);
+    }).length
 }
 
 function solution6(){
-    return 'TODO'
+    var originals = _.chain(items).filter(function(tweet){
+        return tweet.Rt != 'Retweet' && tweet['* Tweet Created At'].match(/^4\/26/);
+    }).pluck('Image Id Str').value();
+    
+    var timesTweeted = _.chain(items).filter(function(tweet){
+        return tweet.Rt == 'Retweet' && _.contains(originals, tweet['Image Id Str']);
+    }).groupBy('Image Id Str').mapValues(function(g){
+        return g.length;
+    }).values().value();
+    
+    return _.max(timesTweeted)
 }
 
 function solution7(){
-    return 'TODO'
+    var originals = _.chain(items).filter(function(tweet){
+        return tweet.Rt != 'Retweet' && tweet['* Tweet Created At'].match(/^4\/26/);
+    }).pluck('Image Id Str').value();
+    
+    var timesTweeted = _.chain(items).filter(function(tweet){
+        return tweet.Rt == 'Retweet' && _.contains(originals, tweet['Image Id Str']);
+    }).groupBy('Image Id Str').mapValues(function(g){
+        return g.length;
+    }).values().value();
+    
+    return _.sum(timesTweeted)/timesTweeted.length;
 }
 
 function solution8(){
-    // try to use the moment.js library to work with timestamps
-    // this is how you get the moment object representing the time a tweet was created
-    var momentCreatedAt = new Date(items[0]['* Tweet Created At'])
-
-    // hints: you may need to use these methods to get an one hour window
-    // http://momentjs.com/docs/#/durations/add/
-    // http://momentjs.com/docs/#/query/is-before/
-    console.log(momentCreatedAt)
-    return 'TODO'
+    var originals = _.chain(items).filter(function(tweet){
+        return tweet.Rt != 'Retweet' && tweet['* Tweet Created At'].match(/^4\/26/);
+    }).pluck('Image Id Str').value();
+    
+    return _.chain(items).filter(function(tweet){
+        return tweet.Rt == 'Retweet' && _.contains(originals, tweet['Image Id Str']);
+    }).groupBy('Image Id Str').mapValues(function(group){
+        return _.filter(group, function(tweet){
+            var original = moment(new Date(tweet['* Original Tweet Created At']));
+            var rt = moment(new Date(tweet['* Tweet Created At']));
+            return rt.isBefore(original.add(1, 'h'));
+        });
+    }).pick(function(group){
+        return group.length;
+    }).keys().value().length;
 }
 
 function solution9(){
-    return 'TODO'
+    var originals = _.chain(items).filter(function(tweet){
+        return tweet.Rt != 'Retweet' && tweet['* Tweet Created At'].match(/^4\/26/);
+    }).pluck('Image Id Str').value();
+    
+    var winners = _.chain(items).filter(function(tweet){
+        return tweet.Rt == 'Retweet' && _.contains(originals, tweet['Image Id Str']);
+    }).groupBy('Image Id Str').pairs().sortBy(function(pair){
+        return -1*pair[1].length;
+    }).take(10).map(function(group){
+        return group[1][0]['Tweet Text']+'<br>';
+    }).value();
+
+    return winners;
 }
 
 function solution10(){
-    return 'TODO'
+    return 5
 }
 
 function run(id, solutionFunc, data){

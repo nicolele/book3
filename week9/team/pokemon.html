@@ -58,11 +58,12 @@ function solution3(data){
 }
 
 function solution4(data){
-    return 'TODO'
+    var maxAttack = _.max(_.pluck(data, 'Attack'))
+    return _.pluck(_.filter(data, {'Attack': maxAttack}), 'Name')
 }
 
 function solution5(data){
-    return 'TODO'
+    return _.pluck(_.filter(data, {'Type': 'GRASS'}), 'Name').join(', ')
 }
 
 function run(id, solutionFunc, data){
