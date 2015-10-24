@@ -47,46 +47,90 @@
 var items   // global scope (i.e., can be accessed in javascript console)
 
 function solution1(){
-    // TODO: replace the hard coded values in series by actual computation
+    var groups = _.groupBy(items, 'CrsPBADept')
+    var counts = _.mapValues(groups, function(g){
+        return g.length
+    })    
     var data = {
-          labels: ['HIST', 'HONR', 'HUMN', 'IAFS', 'IPHY'],
-          series: [
-            [121,23,42,56,12]
-          ]
+          labels: _.take(_.keys(counts), 5),
+          series: [_.take(_.values(counts), 5)]
     }
     new Chartist.Bar('#q1 .answer', data);
 }
 
 function solution2(){
-    // This is a working example, but the problem is that too many departments
-    // are shown and their labels are overlapping
     var groups = _.groupBy(items, 'CrsPBADept')
     var counts = _.mapValues(groups, function(g){
         return g.length
     })
     var data = {
-          labels: _.keys(counts),
-          series: [
-            _.values(counts)
-          ]
+          labels: _.take(_.keys(counts), 25),
+          series: [_.take(_.values(counts), 25)]
     }
     new Chartist.Bar('#q2 .answer', data);
 }
 
 
 function solution3(){
+    var groups = _.groupBy(items, 'CrsPBADept')
+    var counts = _.pairs(_.mapValues(groups, function(g){
+        return g.length
+    }))    
+
+    var filtered = _.filter(counts, function(d){
+      return d[1] >= 100
+    })
+
+    var data = {
+          labels: _.map(filtered, function(d){
+            return d[0]
+          }),
+          series: [_.map(filtered, function(d){
+            return d[1]
+          })]
+    }
+    new Chartist.Bar('#q3 .answer', data);
 }
 
 function solution4(){
+    var groups = _.groupBy(items, 'CrsPBADept')
+    var counts = _.pairs(_.mapValues(groups, function(g){
+        return g.length
+    }))    
+
+    var sorted = _.sortBy(counts, function(d){
+      return -d[1]
+    })
+
+    var data = {
+          labels: _.take(_.keys(_.map(sorted, function(d){
+            return d[0]
+          })), 10),
+          series: [_.take(_.values(_.map(sorted, function(d){
+            return d[1]
+          })), 10)]
+    }
+    new Chartist.Bar('#q4 .answer', data);
 }
 
 function solution5(){
-    // TODO: replace the hard coded values in series by actual computation
+    var departments = _.chain(items).filter(function(d){ 
+      return d.CrsPBADept == 'HIST' || d.CrsPBADept == 'CSCI'
+    }).groupBy('CrsPBADept').value()
+
+
+  var deptLevels = _.mapValues(departments, function(d){
+    return _.chain(d)
+      .groupBy('CrsLvlNum')
+      .mapValues(function(level){ 
+        return level.length}).value()
+      })
+
     var data = {
           labels: ['1xxx', '2xxx', '3xxx', '4xxx'],
           series: [
-            [20,30,40,50],  // CSCI
-            [30,30,30,30]   // HIST
+            _.take(_.unzip(_.pairs(deptLevels['CSCI']))[1], 4),  // CSCI
+            _.take(_.unzip(_.pairs(deptLevels['HIST']))[1], 4)   // HIST
           ]
     }
     new Chartist.Bar('#q5 .answer', data);
