@@ -101,6 +101,9 @@
         <h4>Where are McDonald's and Burger Kings competing nearby?</h4>
         <ul>
             <li>nearby is defined as within 1000 meters</li>
+            <li>McDonald's (red circles)</li>
+            <li>Burger King (blue circles)</li>
+
         </ul>
         <div class="answer"></div>
     </section>
@@ -155,7 +158,12 @@ function solution1(){
         accessToken: 'pk.eyJ1IjoiZG91Ymxlc2hvdyIsImEiOiJjaWZ5Y3B1eTE1MHRidWRtMG9uZXluajg4In0.u5ONW27Ly5cU7M5KYi6Y9Q'
     }).addTo(map)
 
-    // TODO
+    var mcDonaldsInPhoenix = _.filter(items, {city: 'Phoenix', name: "McDonald's"})
+    _.forEach(mcDonaldsInPhoenix, function(d){
+        var latlng = [d['latitude'], d['longitude']]
+        L.marker(latlng).addTo(map)
+    })
+
 }
 
 function solution2(){
@@ -167,7 +175,11 @@ function solution2(){
         accessToken: 'pk.eyJ1IjoiZG91Ymxlc2hvdyIsImEiOiJjaWZ5Y3B1eTE1MHRidWRtMG9uZXluajg4In0.u5ONW27Ly5cU7M5KYi6Y9Q'
     }).addTo(map)
 
-    // TODO
+    var starbucksInPhoenix = _.filter(items, {city: 'Phoenix', name: 'Starbucks'})
+    _.forEach(starbucksInPhoenix, function(d){
+        var latlng = [d['latitude'], d['longitude']]
+        L.marker(latlng).addTo(map)
+    })
 }
 
 function solution3(){
@@ -179,12 +191,24 @@ function solution3(){
         accessToken: 'pk.eyJ1IjoiZG91Ymxlc2hvdyIsImEiOiJjaWZ5Y3B1eTE1MHRidWRtMG9uZXluajg4In0.u5ONW27Ly5cU7M5KYi6Y9Q'
     }).addTo(map)
 
-    // TODO
-    var circle = L.circle([33.45, -112.06], 500, {
-        color: 'red',
-        fillColor: '#f03',
-        fillOpacity: 0.5
-    }).addTo(map);
+    var starbucksInPhoenix = _.filter(items, {city: 'Phoenix', name: 'Starbucks'})
+    _.forEach(starbucksInPhoenix, function(d){
+        var circle = L.circle([d['latitude'], d['longitude']], 500, {
+            color: 'green',
+            fillColor: 'green',
+            fillOpacity: 0.5
+        }).addTo(map);
+    })
+
+    var mcDonaldsInPhoenix = _.filter(items, {city: 'Phoenix', name: "McDonald's"})
+    _.forEach(mcDonaldsInPhoenix, function(d){
+        var circle = L.circle([d['latitude'], d['longitude']], 500, {
+            color: 'blue',
+            fillColor: 'blue',
+            fillOpacity: 0.5
+        }).addTo(map);
+    })
+
 }
 
 function solution4(){
@@ -196,12 +220,16 @@ function solution4(){
         accessToken: 'pk.eyJ1IjoiZG91Ymxlc2hvdyIsImEiOiJjaWZ5Y3B1eTE1MHRidWRtMG9uZXluajg4In0.u5ONW27Ly5cU7M5KYi6Y9Q'
     }).addTo(map)
 
-    // TODO
-    var circle = L.circle([33.45, -112.06], 500, {
-        color: 'red',
-        fillColor: '#f03',
-        fillOpacity: 0.5
-    }).addTo(map);
+    var businessesInPhoenix = _.filter(items, {city: 'Phoenix'})
+    var first200Items = _.take(businessesInPhoenix, 200)
+
+    _.forEach(first200Items, function(d){
+        var circle = L.circle([d['latitude'], d['longitude']], 200, {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: d['stars']/5
+        }).addTo(map);
+    })
 }
 
 function solution5(){
@@ -217,19 +245,17 @@ function solution5(){
         accessToken: 'pk.eyJ1IjoiZG91Ymxlc2hvdyIsImEiOiJjaWZ5Y3B1eTE1MHRidWRtMG9uZXluajg4In0.u5ONW27Ly5cU7M5KYi6Y9Q'
     }).addTo(map)
 
-    // TODO: modify the code below to develop your solution
 
-    var itemsInPhoenix = _.filter(items, {'city': 'Phoenix'})
+    var starbucksInPhoenix = _.filter(items, {city: 'Phoenix', name: 'Starbucks'})
 
-    // draw a line connecting the first two items
-    var latlng1 = [itemsInPhoenix[0].latitude, itemsInPhoenix[0].longitude]
-    var latlng2 = [itemsInPhoenix[1].latitude, itemsInPhoenix[1].longitude]
-    var latlngs = [latlng1, latlng2]
-    var polyline = L.polyline(latlngs, {color: 'yellow'}).addTo(map);
-
-    // draw a circle on the first item
-    L.circle(latlng1, 500, {color: 'red'}).addTo(map);
-    L.circle(latlng2, 500, {color: 'blue'}).addTo(map);
+    _.forEach(starbucksInPhoenix, function(d){
+        L.circle([d['latitude'], d['longitude']], 200, {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: .5
+        }).addTo(map);
+        L.polyline([[d['latitude'], d['longitude']], cityCenterLatLng], {color: 'yellow'}).addTo(map);
+    })    
 }
 
 function solution6(){
@@ -244,6 +270,17 @@ function solution6(){
         accessToken: 'pk.eyJ1IjoiZG91Ymxlc2hvdyIsImEiOiJjaWZ5Y3B1eTE1MHRidWRtMG9uZXluajg4In0.u5ONW27Ly5cU7M5KYi6Y9Q'
     }).addTo(map)
 
+    var starbucksInPhoenix = _.filter(items, {city: 'Phoenix', name: 'Starbucks'})
+
+    _.forEach(starbucksInPhoenix, function(d){
+        L.circle([d['latitude'], d['longitude']], d['review_count'] * 25, {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: .5
+        }).addTo(map);
+        L.polyline([[d['latitude'], d['longitude']], cityCenterLatLng], {color: 'yellow'}).addTo(map);
+    })  
+
 }
 
 function solution7(){
@@ -255,7 +292,17 @@ function solution7(){
         accessToken: 'pk.eyJ1IjoiZG91Ymxlc2hvdyIsImEiOiJjaWZ5Y3B1eTE1MHRidWRtMG9uZXluajg4In0.u5ONW27Ly5cU7M5KYi6Y9Q'
     }).addTo(map)
 
-    // TODO
+    var restaurantsInPhoenix = _.filter(items, function(object){
+        return (object.city == 'Phoenix' && 
+            object.categories.indexOf('Restaurants') > -1 && 
+            object.review_count >= 5 && 
+            object.stars >= 3.5)
+    })
+
+    _.forEach(restaurantsInPhoenix, function(d){
+        var latlng = [d['latitude'], d['longitude']]
+        L.marker(latlng).addTo(map)
+    })
 }
 
 function solution8(){
@@ -267,7 +314,28 @@ function solution8(){
         accessToken: 'pk.eyJ1IjoiZG91Ymxlc2hvdyIsImEiOiJjaWZ5Y3B1eTE1MHRidWRtMG9uZXluajg4In0.u5ONW27Ly5cU7M5KYi6Y9Q'
     }).addTo(map)
 
-    // TODO
+    var restaurantsInPhoenix = _.filter(items, function(object){
+        return (object.city == 'Phoenix' && 
+            object.categories.indexOf('Restaurants') > -1 && 
+            object.review_count >= 5 && 
+            object.stars >= 3.5)
+    })
+
+    _.forEach(restaurantsInPhoenix, function(d){
+        if (d.open == true) {
+            var circle = L.circle([d['latitude'], d['longitude']], 500, {
+                color: 'green',
+                fillColor: 'green',
+                fillOpacity: d['stars']/5
+            }).addTo(map);
+        } else if (d.open == false) {
+             var circle = L.circle([d['latitude'], d['longitude']], 500, {
+                color: 'red',
+                fillColor: 'red',
+                fillOpacity: d['stars']/5
+            }).addTo(map);           
+        }
+    })    
 }
 
 function solution9(){
@@ -279,7 +347,16 @@ function solution9(){
         accessToken: 'pk.eyJ1IjoiZG91Ymxlc2hvdyIsImEiOiJjaWZ5Y3B1eTE1MHRidWRtMG9uZXluajg4In0.u5ONW27Ly5cU7M5KYi6Y9Q'
     }).addTo(map)
 
-    // TODO
+    var upsInPhoenix = _.filter(items, {city: 'Phoenix', name: 'The UPS Store'})
+
+    _.forEach(upsInPhoenix, function(d){
+        L.circle([d['latitude'], d['longitude']], 5000, {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: .5
+        }).addTo(map)    
+    })  
+
 }
 
 function solution10(){
@@ -291,7 +368,25 @@ function solution10(){
         accessToken: 'pk.eyJ1IjoiZG91Ymxlc2hvdyIsImEiOiJjaWZ5Y3B1eTE1MHRidWRtMG9uZXluajg4In0.u5ONW27Ly5cU7M5KYi6Y9Q'
     }).addTo(map)
 
-    // TODO
+    var mcDonaldsInPhoenix = _.filter(items, {city: 'Phoenix', name: "McDonald's"})
+    var bkInPhoenix = _.filter(items, {city: 'Phoenix', name: 'Burger King'})
+
+    _.forEach(mcDonaldsInPhoenix, function(d){
+        L.circle([d['latitude'], d['longitude']], 1000, {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: .5
+        }).addTo(map)    
+    })  
+
+    _.forEach(bkInPhoenix, function(d){
+        L.circle([d['latitude'], d['longitude']], 1000, {
+            color: 'blue',
+            fillColor: 'blue',
+            fillOpacity: .5
+        }).addTo(map)    
+    })  
+
 }
 
 var items = []

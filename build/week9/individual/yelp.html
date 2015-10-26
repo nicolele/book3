@@ -85,37 +85,146 @@ function solution2(){
 }
 
 function solution3(){
-    var businessesInGilbert = _.filter(items, {city: 'Gilbert'})
-    // TODO: find McDonloads and compute the distance between the first two
-    return 'TODO'
+    var mcDonaldsInGilbert = _.filter(items, {city: 'Gilbert', name: "McDonald's"})
+
+    var c0 = {latitude: mcDonaldsInGilbert[0].latitude, longitude: mcDonaldsInGilbert[0].longitude}
+    var c1 = {latitude: mcDonaldsInGilbert[1].latitude, longitude: mcDonaldsInGilbert[1].longitude} 
+    return geolib.getDistance(c0,c1)/1000 + ' km'
 }
 
 function solution4(){
-    return 'TODO'
+    var mcDonaldsInPhoenix = _.filter(items, {city: 'Phoenix', name: "McDonald's"})
+
+    var coordinates = geolib.getCenter(_.map(mcDonaldsInPhoenix, function(mcD){
+        return {'latitude': mcD.latitude, 'longitude': mcD.longitude}
+    }))
+
+    return 'latitude: ' + coordinates.latitude + ', longitude: ' + coordinates.longitude
 }
 
 function solution5(){
-    return 'TODO'
+    var mcDonaldsInPhoenix = _.filter(items, {city: 'Phoenix', name: "McDonald's"})
+    var starbucksInPhoenix = _.filter(items, {city: 'Phoenix', name: 'Starbucks'})
+
+    if (mcDonaldsInPhoenix.length > starbucksInPhoenix.length) return "McDonald's"
+    else return 'Starbucks'
 }
 
 function solution6(){
-    return 'TODO'
+    var starbucksInPhoenix = _.filter(items, {city: 'Phoenix', name: 'Starbucks'})
+    var mostReviewed = _.sortBy(starbucksInPhoenix, function(sbux){
+        return -sbux.review_count
+    })[0]
+
+    return 'latitude: ' + mostReviewed.latitude + ', longitude: ' + mostReviewed.longitude
 }
 
 function solution7(){
-    return 'TODO'
+    var starbucksInPhoenix = _.filter(items, {city: 'Phoenix', name: 'Starbucks'})
+    var mostReviewed = _.sortBy(starbucksInPhoenix, function(sbux){
+        return -sbux.review_count
+    })[0]
+    var mostReviewedCoordinates = {'latitude': mostReviewed.latitude, 
+        'longitude': mostReviewed.longitude}
+
+    var mcDonaldsInPhoenix = _.filter(items, {city: 'Phoenix', name: "McDonald's"})
+
+    var mcDistance = _.map(mcDonaldsInPhoenix, function(mcd){
+        return {'latitude': mcd.latitude, 'longitude': mcd.longitude}
+    })
+
+    var nearest = geolib.findNearest(mostReviewedCoordinates, mcDistance, 1)
+
+    return 'latitude: ' + nearest.latitude + ', longitude: ' + nearest.longitude
 }
 
 function solution8(){
-    return 'TODO'
-}
+    var starbucksInPhoenix = _.filter(items, {city: 'Phoenix', name: 'Starbucks'})
+    var mostReviewed = _.sortBy(starbucksInPhoenix, function(sbux){
+        return -sbux.review_count
+    })[0]
+    var mostReviewedCoordinates = {'latitude': mostReviewed.latitude, 
+        'longitude': mostReviewed.longitude}
+
+    var coffeeInPhoenix = _.filter(items, function(object){
+        return (object.city == 'Phoenix' && object.categories.indexOf('Coffee & Tea') > -1)
+    })
+    var coffeeDistance = _.map(coffeeInPhoenix, function(coffee){
+        return {'latitude': coffee.latitude, 'longitude': coffee.longitude}
+    })
+
+    var distances = geolib.orderByDistance(mostReviewedCoordinates, coffeeDistance)
+
+    var kmDistances = _.map(distances, function(d){
+        return d.distance/1000
+    })
+
+    return _.remove(kmDistances, function(n){
+        return n <= 2
+    }).length
+}   
 
 function solution9(){
-    return 'TODO'
+    var mcDonaldsInPhoenix = _.filter(items, {city: 'Phoenix', name: "McDonald's"})
+    var mcLatitude = _.pluck(mcDonaldsInPhoenix, 'latitude')
+    var south = _.min(mcLatitude)
+    var north = _.max(mcLatitude)
+
+    var mostSouth = _.filter(mcDonaldsInPhoenix, {latitude: south})
+    var mostNorth = _.filter(mcDonaldsInPhoenix, {latitude: north})
+
+    return "Furthest north-- latitude: " + mostNorth[0].latitude + ", longitude: "
+            + mostNorth[0].longitude + "<br>Furthest south-- latitude: " + mostSouth[0].latitude + 
+            ", longitude: " + mostSouth[0].longitude
+
 }
 
 function solution10(){
-    return 'TODO'
+    var mcDonaldsInPhoenix = _.filter(items, {city: 'Phoenix', name: "McDonald's"})
+    var starbucksInPhoenix = _.filter(items, {city: 'Phoenix', name: 'Starbucks'})
+
+    var distances = _.mapValues(mcDonaldsInPhoenix, function(mcd){
+        return {'full address': mcd.full_address, 
+            d1: geolib.getDistance({latitude: starbucksInPhoenix[0].latitude, 
+                longitude: starbucksInPhoenix[0].longitude},
+                {latitude: mcd.latitude, longitude: mcd.longitude}), 
+            d2: geolib.getDistance({latitude: starbucksInPhoenix[1].latitude, 
+                longitude: starbucksInPhoenix[1].longitude},
+                {latitude: mcd.latitude, longitude: mcd.longitude}), 
+            d3: geolib.getDistance({latitude: starbucksInPhoenix[2].latitude, 
+                longitude: starbucksInPhoenix[2].longitude},
+                {latitude: mcd.latitude, longitude: mcd.longitude}),
+            d4: geolib.getDistance({latitude: starbucksInPhoenix[3].latitude, 
+                longitude: starbucksInPhoenix[3].longitude},
+                {latitude: mcd.latitude, longitude: mcd.longitude}),
+            d5: geolib.getDistance({latitude: starbucksInPhoenix[4].latitude, 
+                longitude: starbucksInPhoenix[4].longitude},
+                {latitude: mcd.latitude, longitude: mcd.longitude}),
+            d6: geolib.getDistance({latitude: starbucksInPhoenix[5].latitude, 
+                longitude: starbucksInPhoenix[5].longitude},
+                {latitude: mcd.latitude, longitude: mcd.longitude}),
+            d7: geolib.getDistance({latitude: starbucksInPhoenix[6].latitude, 
+                longitude: starbucksInPhoenix[6].longitude},
+                {latitude: mcd.latitude, longitude: mcd.longitude}),
+            d8: geolib.getDistance({latitude: starbucksInPhoenix[7].latitude, 
+                longitude: starbucksInPhoenix[7].longitude},
+                {latitude: mcd.latitude, longitude: mcd.longitude})}
+    })
+
+    var noStarbucks = _.filter(distances, function(d){
+        return (d.d1 > 5000 && 
+               d.d2 > 5000 && 
+               d.d3 > 5000 && 
+               d.d4 > 5000 && 
+               d.d5 > 5000 &&
+               d.d6 > 5000 &&
+               d.d7 > 5000 &&
+               d.d8 > 5000)
+    })
+
+    return _.pluck(noStarbucks, 'full address')
+
+
 }
 
 function run(id, solutionFunc, data){
