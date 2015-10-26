@@ -54,39 +54,105 @@ hackathon.
 
 ### Business Type
 
-Our team chose to analyze candidate locations for (fill in the business type).
+Our team chose to analyze candidate locations for a new full-service daycare center.
 
 ### Contributors
 
 The team members who contributed to this hackathon are:
 
-- (Name)
-- (Name)
-- (Name)
-- (Name)
-- (Name)
-- (Name)
+- Nicole Woytarowicz
+- Satchel Spencer
+- Tristan Wagar
+- John Murphy
+- Sushant Mittal
 
 ### 20 Questions
 
 Our team came up with the following relevant questions:
 
-1. Does the location have ..... ? contributed by (Name)
+1. __Nicole__ Does the location not have any liquor stores within 3km? contributed by Nicole Woytarowicz
 
-  (one sentence justification why this question is important)
+  Generally might signify a less nice part of town if there are liquor stores near by.
 
-1. Does the location have ..... ? contributed by (Name)
+1. Is the location within 10km of the city center? contributed by Satchel Spencer
 
-  (one sentence justification why this question is important)
+  You don't want kids easily running off into the desert.
 
-1. Does the location have ..... ? contributed by (Name)
+1. __Tristan__ Does the location have a park within 5 miles? contributed by Tristan Wagar
 
-  (one sentence justification why this question is important)
+  Children like to play outside.
 
-(add more until you hit 20)
+1. Does the location not have a lot of clubs and bars within 2km? contributed by Nicole Woytarowicz
+
+  Generally don't want to involve children in the nightlife of a city.
+
+1. Does the location have pre-school or elementary school within 1km? contributed by Tristan Wagar
+
+  Can drop your kids off at daycare after or before school.
+
+1. __Tristan__ Does the location have a grocery store within 5 miles? contributed by Tristan Wagar
+
+  Can easily do your grocery shopping after picking up or dropping off your kids.
+
+1. __Satchel__ Does the location have any competeing daycares within 6km? contributed by Satchel Spencer
+
+  Don't want to be competing with other daycares.
+
+1. Does the location have any 4 star or above restaurants within 5km? contributed by Satchel Spencer
+
+  Indicator of affluence and better neighborhood.
+
+1. Does the location have any restaurants with a price range above 3 within 3km? contributed by Nicole Woytarowicz
+
+  Another indicator of affluence and better neighborhood.
+
+1. Does the location have any restaurants within 5 km that are good for kids? contributed by Tristan Wagar
+
+  So you can take your kids out to eat after picking them up.
+
+1. Does the location have any locations within 3km that have free wifi? contributed by Satchel Spencer
+
+  In case a parent needs internet to get some work done, they can do so near by the kids.
+
+1. __Nicole__ Is there a hospital within 5km? contributed by Satchel Spencer
+
+  In case something happens to a child and they need to be seen by a doctor.
+
+1. __John__ Is there street parking within 1km of the location? contributed by Satchel Spencer
+
+  So parents can park somewhere when dropping off their kids.
+
+1. Are there any businesses with an upscale ambience within 5km of the location? contributed by Satchel Spencer
+
+  Indicator of affluence and nice neighborhood again.
+
+1. Are there a lot of businesses good for dessert within 1km of the location? contributed by Nicole Woytarowicz
+
+  Children love sweets.
+
+1. __Satchel__ Are there mostly quiet businesses within 1km of the location? contributed by Satchel Spencer
+
+  Want to keep things peaceful.
+
+1. __John__ Is there a lice service provider within 1km? contributed by Satchel Spencer
+
+  Children are prone to getting lice, especially when in groups.
+
+1. __Sushant__ Is there an ice cream/frozen yogurt place within 2km of the location? contributed by Satchel Spencer
+
+  Children love ice cream.
+
+1. __Sushant__ Is there a police department within 3km of the location? contributed by Satchel Spencer
+
+  Want police departments to signify safety of location.
+
+1. Are there any businesses with a classy ambience within 3km of the location? contributed by Nicole Woytarowicz
+
+  Another indicator of affluence.
+
 
 ### Conclusion
 
-Our team collectively has implemented (N) scoring functions. Based on
-the scores, our team recommends location (1, 2, 3, 4, 5, or 6 from west to east),
-because it receives (m) out of (N) possible scores.
+Our team collectively has implemented 10 scoring functions. Based on
+the scores, our team recommends location 1 from west to east,
+because it receives 7 out of 10 possible scores.
