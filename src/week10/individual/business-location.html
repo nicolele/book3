@@ -12,7 +12,7 @@
 
 <div class="container">
 
-    <h1>Where should we build X?</h1>
+    <h1>Where should we build a new sushi buffet?</h1>
 
     <section id="candidates" class="question">
         <h4>Where are the candidate locations?</h4>
@@ -52,29 +52,79 @@ function getCandidateLocations(){
 // Scoring Functions
 //
 
-function has_some_feature_1(loc){
-  // TODO
-  return true
+function has_fewer_than_30_good_for_groups_restaurants_within_1km(loc){
+  var nearbyBusinesses = _.filter(items, function(item){
+      var loc2  = _.pick(item, ['latitude', 'longitude'])
+      var d = geolib.getDistance(loc, loc2)
+    return d <= 1000
+  })
+
+  var goodForGroups = _.filter(nearbyBusinesses, function(business){
+    return business.attributes['Good For Groups'] == true && 
+      business.categories.indexOf('Restaurants') > -1
+  })
+
+
+  return goodForGroups.length <= 30
 }
 
-function has_some_feature_2(loc){
-  // TODO
-  return false
+function has_fewer_than_20_restaurants_within_1km(loc){
+  var nearbyBusinesses = _.filter(items, function(item){
+      var loc2  = _.pick(item, ['latitude', 'longitude'])
+      var d = geolib.getDistance(loc, loc2)
+  return d <= 1000
+  })
+
+  var restaurants = _.filter(nearbyBusinesses, function(business){
+      return business.categories.indexOf('Restaurants') > -1
+  })
+
+  return restaurants.length <= 20
 }
 
-function has_some_feature_3(loc){
-  // TODO
-  return true
+function has_music_venues_within_2km(loc){
+  var nearbyBusinesses = _.filter(items, function(item){
+      var loc2  = _.pick(item, ['latitude', 'longitude'])
+      var d = geolib.getDistance(loc, loc2)
+  return d <= 2000
+  })
+
+  var musicVenues = _.filter(nearbyBusinesses, function(business){
+      return business.categories.indexOf('Music Venues') > -1
+  })
+
+  return musicVenues.length > 0
 }
 
-function has_some_feature_4(loc){
-  // TODO
-  return false
+function has_street_parking_within_1km(loc){
+  var nearbyBusinesses = _.filter(items, function(item){
+      var loc2  = _.pick(item, ['latitude', 'longitude'])
+      var d = geolib.getDistance(loc, loc2)
+  return d <= 1000
+  })
+
+  var streetParking = _.filter(nearbyBusinesses, function(business){
+      return business.attributes.Parking && business.attributes.Parking['street'] 
+  })
+
+  return streetParking.length > 0
 }
 
-function has_some_feature_5(loc){
-  // TODO
-  return false
+function has_clubs_and_bars_within_1km(loc){
+  var nearbyBusinesses = _.filter(items, function(item){
+      var loc2  = _.pick(item, ['latitude', 'longitude'])
+      var d = geolib.getDistance(loc, loc2)
+  return d <= 1000
+  })
+
+  var nightlife = _.filter(nearbyBusinesses, function(business){
+      return (business.categories.indexOf('Nighlife') > -1 |
+      business.categories.indexOf('Dance Clubs') > -1 |
+      business.categories.indexOf('Bars') > -1)
+  })
+
+  return nightlife.length > 0
+
 }
 
 //
@@ -168,18 +218,18 @@ function loadDataThenRunSolutions(){
 
       // take only the last 2000 to speed up computation
       // TODO: comment this out before the final submission
-      items = _.takeRight(items, 2000)
+      //items = _.takeRight(items, 2000)
 
       console.log('number of items loaded:', items.length)
       console.log('first item:', items[0])
 
       console.log('scoring all candidate locations')
 
-      scoreAndVisualize(locs, has_some_feature_1, visualize_true_or_false)
-      scoreAndVisualize(locs, has_some_feature_2, visualize_true_or_false)
-      scoreAndVisualize(locs, has_some_feature_3, visualize_true_or_false)
-      scoreAndVisualize(locs, has_some_feature_4, visualize_true_or_false)
-      scoreAndVisualize(locs, has_some_feature_5, visualize_true_or_false)
+      scoreAndVisualize(locs, has_fewer_than_30_good_for_groups_restaurants_within_1km, visualize_true_or_false)
+      scoreAndVisualize(locs, has_fewer_than_20_restaurants_within_1km, visualize_true_or_false)
+      scoreAndVisualize(locs, has_music_venues_within_2km, visualize_true_or_false)
+      scoreAndVisualize(locs, has_street_parking_within_1km, visualize_true_or_false)
+      scoreAndVisualize(locs, has_clubs_and_bars_within_1km, visualize_true_or_false)
 
    })
    .fail(function(err){
