@@ -94,12 +94,11 @@ correctly, and also what other teams are up to in real-time.
 
 The team members who contributed to this hackathon are:
 
-- (Name)
-- (Name)
-- (Name)
-- (Name)
-- (Name)
-- (Name)
+- Nicole Woytarowicz
+- Satchel Spencer
+- John Murphy
+- Sushant Mittal
+- Tristan Wagar
 
 ## Grading
 
@@ -109,16 +108,23 @@ Each person must implement at least ONE detector function. It must be meaningful
 
 Our team came up with the following interesting events:
 
-1. Has observed .... ? contributed by (Name)
+1. Has observed how many tweets in the last second ? contributed by Satchel Spencer
 
-  (one sentence justification why this event is interesting)
+  Testing tweets per second tells us when activity about russia is peaking.
 
-1. Has observed .... ? contributed by (Name)
+1. Has observed a tweet in Russian that mentions the crash and terrorist attacks ? contributed by Nicole Woytarowicz
 
-  (one sentence justification why this event is interesting)
+  It would be interesting to see how many tweets in Russian mention both the crash and terrorism because this will probably reflect the feelings of the Russian people about what led to the crash (since they probably won't be tweeting in English). 
 
-1. Has observed .... ? contributed by (Name)
+1. Has observed when war is mentioned ? contributed by Tristan Wagar
 
-  (one sentence justification why this event is interesting)
+  By seeing how many times war was mentioned we can see how people view the current situation in Syria with Russia's intervention and how close the general public thinks we are to war and how the media are reporting on war. Headlines can make a huge difference in perception so we can also look out for war related head lines too. 
 
-(add more until you hit N where N is the number of people on your team)
+1. Has observed when nuclear is mentioned ? contributed by Sushant Mittal
+
+ Tweets about nuclear can tell the scale of tension between nation.
+
+1. Has observed when ISIS or al-Qaeda are mentioned ? contributed by John Murphy
+
+ The reason for looking the amount Al Qaeda and ISIS mentions in the stream of tweets is two fold. One to see how people are reacting in Russia and taking out their anger. Also I am collecting the percentage to see how much it can take over the conversation. 
+
