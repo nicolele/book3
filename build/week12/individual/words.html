@@ -39,7 +39,7 @@
     <div class="parallax">
       <img src="http://res.cloudinary.com/craftml/image/upload/c_scale,e_brightness:-62,w_1000/v1447038536/books_nh4k05.jpg">
       <h1 id="title">How did word usage change over time?
-        <div class="authors">by Name</div>
+        <div class="authors">by Nicole Woytarowicz</div>
       </h1>
     </div>
   </div>
@@ -148,43 +148,142 @@ function example(){
 }
 
 function func1(){
-  return '...'
+  var data = _.filter(items, function(word){
+    return word.word === 'data'
+  })
+
+  return _.map(data, function(d){
+    return "<br>decade: " + d.decade + ", rank: " + d.rank
+  })
 }
 
 function func2(){
-  return '...'
+  var oil = _.sortBy(_.filter(items, function(word){
+    return word.word === 'oil'
+  }), 'count')
+
+  return oil[0].decade
 }
 
 function func3(){
-  return '...'
+  var feminism = _.filter(items, function(word){
+    return word.word === 'feminism'
+  })
+
+  return feminism[0].decade
+
 }
 
 function func4(){
-  return '...'
+  var data = _.filter(items, function(word){
+    return word.word === 'communism'
+  })
+
+  return _.map(data, function(d){
+    return "<br>decade: " + d.decade + ", rank: " + d.rank
+  })
 }
 
 function func5(){
-  return '...'
+  var popularWords = _.filter(items, function(word){
+    return word.rank < 300
+  })
+
+  var allWords = _.unique(_.pluck(popularWords, 'word'))
+
+  var newWords = _.chain(popularWords)
+      .filter(function(word){
+        return word.decade > 1950
+      }) 
+      .pluck('word')
+      .unique()
+      .value()
+
+  return _.difference(allWords, newWords).join('<br>')
 }
 
 function func6(){
-  return '...'
-}
+  var popularWords = _.filter(items, function(word){
+    return word.rank < 300
+  })
+
+  var allWords = _.unique(_.pluck(popularWords, 'word'))
+
+  var oldWords = _.chain(popularWords)
+      .filter(function(word){
+        return word.decade <= 1950
+      }) 
+      .pluck('word')
+      .unique()
+      .value()
+
+  return _.difference(allWords, oldWords).join('<br>')}
 
 function func7(){
-  return '...'
+  var internetDecade = _.filter(items, function(word){
+    return word.word === 'internet'
+  })[0].decade
+
+  var alsoPopular = _.chain(items)
+    .groupBy(function(word){
+      return word.word
+    })
+    .filter(function(word){
+      return word[0].decade === internetDecade
+    })
+    .value()
+
+  return _.map(alsoPopular, function(d){
+    return " " + d[0].word
+  })
 }
 
 function func8(){
-  return '...'
+  var oil = _.filter(items, function(word){
+    return word.word === 'oil'
+  })
+
+  var gold = _.filter(items, function(word){
+    return word.word === 'gold'
+  })
+
+  var decades = _.map(_.zip(oil, gold), function(word){
+    if (parseInt(word[0].rank) < parseInt(word[1].rank)) return parseInt(word[0].decade)
+    else return 0
+  })
+
+  return _.dropWhile(decades, function(n){
+    return n === 0
+  })[0]
 }
 
 function func9(){
-  return '...'
+  var wordRanks = _.chain(items)
+    .groupBy(function(word){
+      return word.word
+    })
+    .mapValues(function(word){
+      return _.last(word).rank - _.first(word).rank
+    })
+    .pairs()
+    .value()
+
+  var biggestDrops = _.take(_.sortBy(wordRanks, function(d){
+    return -d[1]
+  }), 40)
+  
+  return _.map(biggestDrops, function(d){
+    return " " + d[0]
+  })
 }
 
 function func10(){
-  return '...'
+  var warRanks = _.chain(items)
+    .filter({'word': 'war'})
+    .pluck('rank')
+    .value()
+
+  console.log(warRanks)
 }
 
 // initialize the parallax effect
