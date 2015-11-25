@@ -216,8 +216,11 @@ function func6(){
       .pluck('word')
       .unique()
       .value()
+  
+  console.log(oldWords)
 
-  return _.difference(allWords, oldWords).join('<br>')}
+  //return _.difference(allWords, oldWords).join('<br>')
+}
 
 function func7(){
   var internetDecade = _.filter(items, function(word){
