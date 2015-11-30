@@ -86,7 +86,13 @@ function func1(){
 }
 
 function func2(){
-  console.log(items)
+ var tlast = items[334].Ping_time.split(':')
+ var tlastsec = parseInt(tlast[0]) * 3600 + parseInt(tlast[1]) * 60 + parseInt(tlast[2])
+
+ var t0 = items[0].Ping_time.split(':')
+ var t0sec = parseInt(t0[0]) * 3600 + parseInt(t0[1]) * 60 + parseInt(t0[2])
+
+ return Math.round((tlastsec - t0sec)/335) + ' seconds'
 }
 
 function func3(){
@@ -170,21 +176,96 @@ function func7(){
 }
 
 function func8(){
-  return '...'
+  var el = $(this).find('.viz')[0]    // lookup the element that will hold the map
+  $(el).height(500) // set the map to the desired height
+  var map = createMap(el, [items[0].Latitude, items[0].Longitude], 11)
+
+  _.forEach(items, function(item){
+    var circle = L.circle([item.Latitude, item.Longitude], 20, {
+      color: 'red',
+      fillColor: '#f03',
+      fillOpacity: 0.5
+    }).addTo(map);
+  })
 }
 
 function func9(){
-  return '...'
+  var mostCommon = func6()
+
+  var el = $(this).find('.viz')[0]    // lookup the element that will hold the map
+  $(el).height(500) // set the map to the desired height
+  var map = createMap(el, [items[0].Latitude, items[0].Longitude], 11)
+
+  _.forEach(items, function(item){
+    if (_.includes(item.Samples, mostCommon)) {
+      var circle = L.circle([item.Latitude, item.Longitude], 20, {
+        color: 'red',
+        fillColor: '#f03',
+        fillOpacity: 0.5
+      }).addTo(map);
+    }
+  })
 }
 
 function func10(){
-  return '...'
+  var el = $(this).find('.viz')[0]    // lookup the element that will hold the map
+  $(el).height(500) // set the map to the desired height
+  var map = createMap(el, [items[0].Latitude, items[0].Longitude], 11)
+
+  _.forEach(items, function(item){
+      var density = _.sum(item.Samples, function(sample){
+        if (sample > 0){
+          return sample
+        }
+      })/1000
+      if (density > 1) density = 1.0
+      if (density <= .05) color = '#FFC1C1'
+      else if (density <= .1) color = '#FF6A6A'
+      else if (density <= .5) color = '#FF7256'
+      else color = '#FF2400'
+      console.log(density)
+      var circle = L.circle([item.Latitude, item.Longitude], 20, {
+        color: color,
+        fillColor: '#f03',
+        fillOpacity: .5
+      }).addTo(map);
+  })
 }
 
 function func11(){
-  return '...'
+  var el = $(this).find('.viz')[0]    // lookup the element that will hold the map
+  $(el).height(500) // set the map to the desired height
+  var map = createMap(el, [items[0].Latitude, items[0].Longitude], 11)
+
+  var fishSamples = _.filter(items, function(value){
+    return _.contains(value.Samples, "1.000000") || _.contains(value.Samples, "3.000000")
+  })
+
+  _.each(fishSamples, function(sample){
+    L.circle([sample.Latitude, sample.Longitude], 20, {
+      color: 'red',
+      fillColor: '#f03',
+      fillOpacity: 0.5
+    }).addTo(map);
+  })
+
 }
 
+
 function func12(){
-  return '...'
+  var el = $(this).find('.viz')[0]    // lookup the element that will hold the map
+  $(el).height(500) // set the map to the desired height
+  var map = createMap(el, [items[0].Latitude, items[0].Longitude], 11)
+
+  var zoopSamples = _.filter(items, function(value){
+    return _.contains(value.Samples, "7.000000") || _.contains(value.Samples, "13.000000")
+  })
+
+  _.each(zoopSamples, function(sample){
+    L.circle([sample.Latitude, sample.Longitude], 20, {
+      color: 'red',
+      fillColor: '#f03',
+      fillOpacity: 0.5
+    }).addTo(map);
+  })
 }
